@@ -2,7 +2,7 @@
   <div class="bg-matrix text-white container-fluid">
     <div class="row my-4">
       <div class="col-4" v-for="target in targets" :key="target">
-        <img :src="target.img" alt />
+        <img :src="target.img" class="img-fluid" alt />
         <h1 v-if="target.health >0">{{ target.name}}</h1>
         <h2 v-else>{{target.name}} is Dead</h2>
         <h1
@@ -15,7 +15,7 @@
           v-for="attack in attacks"
           :key="attack.name"
           :disabled="target.health == 0"
-          @click="attackEnemy(target,attack.damage)"
+          @click="attackEnemy(target,attack.img, attack.damage)"
         >{{attack.name}}</button>
         <button
           class="btn btn-primary"
@@ -30,43 +30,43 @@
 <script>
 export default {
   data() {
-    // name: "App";
+    name: "App";
     return {
       targets: [
         {
           health: 100,
           name: "Bob",
           hits: 0,
-          img: "./assests/guy-idle.png",
+          img: require("@/assets/guy-idle.png"),
         },
         {
           health: 100,
           name: "Sam",
           hits: 0,
-          img: "./assests/guy-idle.png",
+          img: require("@/assets/guy-idle.png"),
         },
         {
           health: 100,
           name: "Jake",
           hits: 0,
-          img: "./assests/guy-idle.png",
+          img: require("@/assets/guy-idle.png"),
         },
       ],
       attacks: [
         {
           name: "slap",
           damage: 1,
-          img: "./assets/guy-slap.png",
+          img: require("@/assets/guy-slap.png"),
         },
         {
           name: "punch",
           damage: 5,
-          img: "./assests/guy-punch.png",
+          img: require("@/assets/guy-punch.png"),
         },
         {
           name: "kick",
           damage: 10,
-          img: "./assests/guy-kick.png",
+          img: require("@/assets/guy-kick.png"),
         },
         // {
         //   name: "dead",
@@ -74,12 +74,18 @@ export default {
         //   img: "./assests/guy-dead.png",
         // },
       ],
+      guyIdle: require("@/assets/guy-idle.png"),
     };
   },
   methods: {
-    attackEnemy(target, dmg) {
+    attackEnemy(target, img, dmg) {
       target.health -= dmg;
       target.hits++;
+      target.img = img;
+      setTimeout(() => this.resetGuy(target), 1000);
+    },
+    resetGuy(target) {
+      target.img = this.guyIdle;
     },
     reset(target) {
       (target.health = 100), (target.hits = 0);
@@ -87,4 +93,5 @@ export default {
   },
 };
 </script>
+
 
